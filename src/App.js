@@ -14,10 +14,10 @@ const App = () => {
 
     const requestOptions = {
       method: 'POST',
-      body: {
+      body: JSON.stringify({
         flotiqApiKey:  flotiqApiKey ,
         wordpressUrl:  wordpressUrl 
-      }
+      })
     }
 
     console.log(requestOptions)
