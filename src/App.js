@@ -1,5 +1,4 @@
-import React, { useState, /*useEffect*/ 
-useEffect} from "react";
+import React, { useState,} from "react";
 //import Spinner from "react-bootstrap/Spinner";
 
 import "./App.css";
