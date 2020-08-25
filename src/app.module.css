@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    border: 1px solid black;
+   
+}
+.column {
+    margin: 5px;
+    display: flex;
+    border: 1px solid black;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+.spinner {
+    display: flex;
+    border: 1px solid red;
+    
+    width: 200;
+}
+.input {
+    padding: 5px;
+    height: 5%;
+    
+}
