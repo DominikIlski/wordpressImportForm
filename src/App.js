@@ -50,10 +50,10 @@ const requestCodeGenerator = () => {
 
 const App = () => {
   const [flotiqApiKey, setFlotiqApiKey] = useState(
-    "598bd3479dd03d67663d751e0d8db7cf"
+    ""
   );
   const [wordpressUrl, SetWordpressUrl] = useState(
-    "https://wordpress-mysql.dev.cdwv.pl/"
+    ""
   );
   const [progress, SetProgress] = useState("none");
   const [userRequestCode, SetUserRequestCode] = useState("");
