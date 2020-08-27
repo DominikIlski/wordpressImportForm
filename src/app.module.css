@@ -1,23 +1,33 @@
 .container {
-    display: flex;
-    border: 1px solid black;
-   
+  display: flex;
 }
 .column {
-    margin: 5px;
-    display: flex;
-    border: 1px solid black;
-    flex-wrap: wrap;
-    flex-direction: column;
+  margin: 5px;
+  display: flex;
+
+  flex-wrap: wrap;
+  flex-direction: column;
 }
 .spinner {
-    display: flex;
-    border: 1px solid red;
-    
-    width: 200;
+  display: flex;
+  margin-right: 14%;
 }
 .input {
-    padding: 5px;
-    height: 5%;
-    
+  padding: 5px;
+  height: 5%;
 }
+.centerContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 200px;
+}
+
+.vl {
+    border-left: 6px solid green;
+    height: 400px;
+    margin: 10px;
+    margin-left: 6px;
+    top: 0;
+  }

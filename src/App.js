@@ -1,8 +1,9 @@
-import React, { useState, } from "react";
+import React, { useState } from "react";
 //import Spinner from "react-bootstrap/Spinner";
 
 import "./App.css";
 import styles from "./app.module.css";
+import { CircularProgress } from "@material-ui/core";
 const randomWords = require("random-words");
 
 const WP_IMPORT_AUTH =
@@ -11,7 +12,7 @@ const WP_IMPORT_STATUS =
   "https://4nkqkd9vc2.execute-api.us-east-1.amazonaws.com/default/wordpressImporterStatus?userRequestCode=";
 
 const timestamp = new Date();
-let interval = setInterval(() => {}, 1000000000)
+let interval = setInterval(() => {}, 1000000000);
 
 const checkStatus = async (userRequestCode) => {
   let responseBody;
@@ -28,10 +29,9 @@ const checkStatus = async (userRequestCode) => {
   console.log(statusRequest);
   responseBody = await statusRequest.json();
   console.log(responseBody);
-  
+
   if (responseBody.Item) return responseBody.Item.status.S;
   else return "There is no import with that request code";
-
 };
 
 const UcFirst = (word) => {
@@ -56,20 +56,22 @@ const App = () => {
   );
   const [progress, SetProgress] = useState("none");
   const [userRequestCode, SetUserRequestCode] = useState("");
+  const [isFetching, SetIsFetching] = useState(false);
   console.log("init of state");
   console.log(userRequestCode);
-
+  console.log(isFetching);
+  if (progress === "success") clearInterval(interval);
 
   const submit = async () => {
-
-    clearInterval(interval)
+    SetIsFetching(true);
+    clearInterval(interval);
     const userCode = requestCodeGenerator();
     console.log(userCode);
     SetUserRequestCode(userCode);
     SetUserRequestCode(userCode);
 
     console.log(userCode);
-    
+
     const url =
       WP_IMPORT_AUTH +
       `?userRequestCode=${userCode}` +
@@ -84,17 +86,14 @@ const App = () => {
     const res = await fetch(url, requestOptions);
     if (res.status !== 200) SetProgress("error");
     if (res.status === 200) SetProgress(await checkStatus(userCode));
+    SetIsFetching(false);
 
-    
-      interval = setInterval(async () => {
-        SetProgress(await checkStatus(userCode))
-      }, 5000)
-      
-   
-
-
+    interval = setInterval(async () => {
+      SetIsFetching(true);
+      SetProgress(await checkStatus(userCode));
+      SetIsFetching(false);
+    }, 5000);
   };
-
 
   return (
     <div className={styles.container}>
@@ -124,27 +123,44 @@ const App = () => {
           <input type="button" value="Import to Flotiq" onClick={submit} />
         </form>
       </div>
+      <div className={styles.vl}></div>
       <div className={styles.column}>
         <h2>Your individual request code: </h2>
         <input
           className={styles.input}
           type="text"
           value={userRequestCode}
-          onChange={(event) => {SetUserRequestCode(event.target.value)}}
+          onChange={(event) => {
+            SetUserRequestCode(event.target.value);
+          }}
         ></input>
         <br />
         <button
-          onClick={async () => SetProgress(await checkStatus(userRequestCode))}
+          onClick={async () => {
+            SetIsFetching(true);
+            SetProgress(await checkStatus(userRequestCode));
+            SetIsFetching(false);
+          }}
         >
           Check status
         </button>
       </div>
-      {progress === "none" ? (
-        <div></div>
+      <div className={styles.vl}></div>
+      {isFetching === true ? (
+        <div className={styles.centerContent}>
+          <CircularProgress size={100} className={styles.spinner} />
+          <div className={styles.vl}></div>
+
+        </div>
+      ) : progress === "none" ? (
+        <div />
       ) : (
-        <div className={styles.column}>
-          <h2>Server response: </h2>
-          <h3>Status Code: {progress}</h3>
+        <div className={styles.container}>
+          <div className={styles.column}>
+            <h2>Server response: </h2>
+            <h3>Status Code: {progress}</h3>
+          </div>
+          <div className={styles.vl}></div>
         </div>
       )}
     </div>
