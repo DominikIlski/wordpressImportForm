@@ -1,4 +1,4 @@
-import React, { useState,} from "react";
+import React, { useState, useEffect,} from "react";
 //import Spinner from "react-bootstrap/Spinner";
 
 import "./App.css";
@@ -11,7 +11,7 @@ const WP_IMPORT_STATUS =
   "https://4nkqkd9vc2.execute-api.us-east-1.amazonaws.com/default/wordpressImporterStatus?userRequestCode=";
 
 const timestamp = new Date();
-
+let interval = setInterval(() => {}, 1000000000)
 
 const checkStatus = async (userRequestCode) => {
   let responseBody;
@@ -49,10 +49,10 @@ const requestCodeGenerator = () => {
 
 const App = () => {
   const [flotiqApiKey, setFlotiqApiKey] = useState(
-    ""
+    "5019d7f9b7968409d745e08e201c77d4"
   );
   const [wordpressUrl, SetWordpressUrl] = useState(
-    ""
+    "https://wordpress-mysql.dev.cdwv.pl/"
   );
   const [progress, SetProgress] = useState("none");
   const [userRequestCode, SetUserRequestCode] = useState("");
@@ -61,6 +61,8 @@ const App = () => {
 
 
   const submit = async () => {
+
+    clearInterval(interval)
     const userCode = requestCodeGenerator();
     console.log(userCode);
     SetUserRequestCode(userCode);
@@ -82,6 +84,15 @@ const App = () => {
     const res = await fetch(url, requestOptions);
     if (res.status !== 200) SetProgress("error");
     if (res.status === 200) SetProgress(await checkStatus(userCode));
+
+    
+      interval = setInterval(async () => {
+        SetProgress(await checkStatus(userCode))
+      }, 5000)
+      
+   
+
+
   };
 
 
