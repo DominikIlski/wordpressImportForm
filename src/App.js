@@ -28,6 +28,7 @@ const checkStatus = async (userRequestCode) => {
   );
   console.log(statusRequest);
   responseBody = await statusRequest.json();
+  await new Promise(resolve => setTimeout(resolve, 1000))
   console.log(responseBody);
 
   if (responseBody.Item) return responseBody.Item.status.S;
